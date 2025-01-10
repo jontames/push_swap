@@ -1,0 +1,17 @@
+pb
+ra
+pb
+sa
+pb
+ss
+pb
+sa
+pb
+sb
+pa
+pa
+pa
+pa
+pa
+
+prueba 1 9 4 8 3 7 6

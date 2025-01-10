@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   testeo.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jtames <jtames@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 18:04:06 by jtames            #+#    #+#             */
-/*   Updated: 2025/01/10 20:40:20 by jtames           ###   ########.fr       */
+/*   Updated: 2025/01/10 18:37:57 by jtames           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	sa(int a[])
 	temp = a[0];
 	a[0] = a[1];
 	a[1] = temp;
-	printf("sa\n");
 }
 
 void	sb(int b[])
@@ -32,14 +31,12 @@ void	sb(int b[])
 	temp = b[0];
 	b[0] = b[1];
 	b[1] = temp;
-	printf("sb\n");
 }
 
 void	ss(int a[], int b[])
 {
 	sa(a);
-	sb(b);
-	printf("ss\n");
+	sb(b);	
 }
 
 void	pa(int a[], int b[], int a_size[], int b_size[])
@@ -62,7 +59,6 @@ void	pa(int a[], int b[], int a_size[], int b_size[])
 	b[i - 1] = 0;
 	a_size[0]++;
 	b_size[0]--;
-	printf("pa\n");
 }
 
 void	pb(int a[], int b[], int a_size[], int b_size[])
@@ -85,7 +81,6 @@ void	pb(int a[], int b[], int a_size[], int b_size[])
 	a[i - 1] = 0;
 	a_size[0]--;
 	b_size[0]++;
-	printf("pb\n");
 }
 
 void	ra(int a[], int a_size[])
@@ -101,7 +96,6 @@ void	ra(int a[], int a_size[])
 		i++;
 	}
 	a[i - 1] = temp;
-	printf("ra\n");
 }
 
 void	rb(int b[], int b_size[])
@@ -117,14 +111,12 @@ void	rb(int b[], int b_size[])
 		i++;
 	}
 	b[i - 1] = temp;
-	printf("rb\n");
 }
 
 void	rr(int a[], int b[], int a_size[], int b_size[])
 {
 	ra(a, &a_size[0]);
 	rb(b, &b_size[0]);
-	printf("rr\n");
 }
 
 void	rra(int a[], int a_size[])
@@ -140,7 +132,6 @@ void	rra(int a[], int a_size[])
 		i--;
 	}
 	a[i] = temp;
-	printf("rra\n");
 }
 
 void	rrb(int b[], int b_size[])
@@ -156,100 +147,96 @@ void	rrb(int b[], int b_size[])
 		i--;
 	}
 	b[i] = temp;
-	printf("rrb\n");
 }
 
 void	rrr(int a[], int b[], int a_size[], int b_size[])
 {
 	rra(a, &a_size[0]);
 	rrb(b, &b_size[0]);
-	printf("rrr\n");
 }
 
-int	check_order(int stack[], char way, int size)
+void	wr(int a[], int b[], size_t a_len)
 {
-	int i;
+	size_t	i;
 
 	i = 0;
-	if (way == '+')
+	while (i < a_len)
 	{
-		while (i < size)
-		{
-			if (stack[i] > stack[i + 1])
-				return 0;
-			i++;	
-		}
-		return 1;
-	}
-	else if (way == '-')
-	{
-		while (i < size)
-		{
-			if (stack[i] < stack[i + 1])
-				return 0;
-			i++;	
-		}
-		return 1;
-	}
-	else
-		return 0;
-}
-
-int	check_min(int stack[], int n, int size)
-{
-	int	i;
-	
-	i = 0;
-	while (i < size)
-	{
-		if (n > stack[i])
-			return 0;
+		printf("%d ", a[i]);
+		printf("%d\n", b[i]);
 		i++;
 	}
-	return 1;
+	printf("_ _\na b\n");
 }
 
-int	check_max(int stack[], int n, int size)
+void	ins_slct(int a[], int b[], size_t a_len, int a_size[], int b_size[])
 {
-	int	i;
-	
-	i = 0;
-	while (i < size)
-	{
-		if (n < stack[i])
-			return 0;
-		i++;
-	}
-	return 1;
-}
+	char		input[5];
+	static int	i = 1;
 
-void	algorithm(int a[], int b[], int a_size[], int b_size[]) // Ordenar ifs en base a prioridades
-{
-	if (a[1] < a[0])
+	scanf("%s", input);
+	printf("Comando %d:\n", i);
+	if (strncmp(input, "sa", 2) == 0)
+	{	
 		sa(a);
-	else if (b[1] > b[0])
+		wr(a, b, a_len);
+	}
+	else if (strncmp(input, "sb", 2) == 0)
+	{	
 		sb(b);
-	else if (a[1] < a[0] && b[1] > b[0])
+		wr(a, b, a_len);
+	}
+	else if (strncmp(input, "ss", 2) == 0)
+	{	
 		ss(a, b);
-	else if (check_order(a, '+', a_size[0]) && check_order(b, '-', b_size[0]) && b[0] < a[0])
+		wr(a, b, a_len);
+	}
+	else if (strncmp(input, "pa", 2) == 0)
+	{	
 		pa(a, b, &a_size[0], &b_size[0]);
-	else if (a_size[0] > 0 && a[0] < a[1] && a[0] > b[0])
+		wr(a, b, a_len);
+	}
+	else if (strncmp(input, "pb", 2) == 0)
+	{	
 		pb(a, b, &a_size[0], &b_size[0]);
-	else if (check_max(a, a[0], a_size[0]))
+		wr(a, b, a_len);
+	}
+	else if (strncmp(input, "ra", 2) == 0)
+	{	
 		ra(a, &a_size[0]);
-	else if (check_min(b, b[0], b_size[0]))
+		wr(a, b, a_len);
+	}
+	else if (strncmp(input, "rb", 2) == 0)
+	{	
 		rb(b, &b_size[0]);
-	else if (check_max(a, a[0], a_size[0]) && check_min(b, b[0], b_size[0]))
-		rr(a, b, &a_size[0], &b_size[0]);
-	else if (check_min(a, a[a_size[0] - 1], a_size[0]))
+		wr(a, b, a_len);
+	}
+	else if (strncmp(input, "rra", 3) == 0)
+	{	
 		rra(a, &a_size[0]);
-	else if (check_max(b, b[b_size[0] - 1], b_size[0]))
+		wr(a, b, a_len);
+	}
+	else if (strncmp(input, "rrb", 3) == 0)
+	{	
 		rrb(b, &b_size[0]);
-	else if (check_min(a, a[a_size[0] - 1], a_size[0]) && check_max(b, b[b_size[0] - 1], b_size[0]))
+		wr(a, b, a_len);
+	}
+	else if (strncmp(input, "rrr", 3) == 0)
+	{	
 		rrr(a, b, &a_size[0], &b_size[0]);
+		wr(a, b, a_len);
+	}
+	else if (strncmp(input, "rr", 2) == 0)
+	{	
+		rr(a, b, &a_size[0], &b_size[0]);
+		wr(a, b, a_len);
+	}
+	else if (strncmp(input, "exit", 4) == 0)
+		return;
 	else
-		return ;
-	algorithm(a, b, &a_size[0], &b_size[0]);
+		ins_slct(a, b, a_len, &a_size[0], &b_size[0]);
+	i++;
+	ins_slct(a, b, a_len, &a_size[0], &b_size[0]);
 }
 
 int main(int argc, char const *argv[])
@@ -282,7 +269,17 @@ int main(int argc, char const *argv[])
 			j++;
 		}
 	}
-	algorithm(a, b, &a_size[0], &b_size[0]);
+	printf("Init a and b:\n");
+	i = 0;
+	while (i < a_len)
+	{
+		printf("%d ", a[i]);
+		printf("%d\n", b[i]);
+		i++;
+	}
+	printf("_ _\na b\n");
+	ins_slct(a, b, a_len, &a_size[0], &b_size[0]);
+
 	return 0;
 }
 

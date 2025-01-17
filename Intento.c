@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   Intento.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jtames <jtames@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 18:04:06 by jtames            #+#    #+#             */
-/*   Updated: 2025/01/16 18:54:43 by jtames           ###   ########.fr       */
+/*   Updated: 2025/01/17 18:09:16 by jtames           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,32 +214,52 @@ int	check_max(int stack[], int n, int size)
 
 void	algorithm(int a[], int b[], int a_size[], int b_size[], int a_len)
 {
-	if (a[1] < a[0] && b[1] > b[0])
+	if ((a_size[0] > 1 && check_min(a, a[a_size[0] - 1], a_size[0])) && (b_size[0] > 1 && check_max(b, b[b_size[0] - 1], b_size[0])))
+	{
+		rrr(a, b, &a_size[0], &b_size[0]);
+		printf("rrr\n");
+	}
+	else if ((a_size[0] > 1 && check_max(a, a[0], a_size[0])) && (b_size[0] > 1 && check_min(b, b[0], b_size[0])))
+	{
+		rr(a, b, &a_size[0], &b_size[0]);
+		printf("rr\n");
+	}
+	else if (a_size[0] > 1 && check_min(a, a[a_size[0] - 1], a_size[0]))
+	{
+		rra(a, &a_size[0]);
+		printf("rra\n");
+	}
+	else if ((a_size[0] > 1 && b_size[0] > 1) && (a[1] < a[0] && b[1] > b[0]))
 	{	
 		ss(a, b);
 		printf("ss\n");
 	}
-	else if (a_size[0] > 1 && check_max(a, a[0], a_size[0]))
+	else if (a_size[0] > 1 && a[1] < a[0])
+	{
+		sa(a);
+		printf("sa\n");
+	}
+	else if ((a_size[0] > 1 && check_max(a, a[0], a_size[0])) || (a_size[0] > 1 && a[0] > a[a_size[0] - 1]))
 	{
 		ra(a, &a_size[0]);
 		printf("ra\n");
 	}
-	else if (a[1] < a[0])
+	else if (b_size[0] > 1 && check_max(b, b[b_size[0] - 1], b_size[0]))
 	{
-		sa(a);
-		printf("sa\n");
+		rrb(b, &b_size[0]);
+		printf("rrb\n");
 	}
 	else if (b_size[0] > 1 && check_min(b, b[0], b_size[0]))
 	{
 		rb(b, &b_size[0]);
 		printf("rb\n");
 	}
-	else if (b[1] > b[0])
+	else if (b_size[0] > 1 && b[1] > b[0])
 	{
 		sb(b);
 		printf("sb\n");
-	}
-	else if (check_order(a, '+', a_size[0]) && b[0] < a[0])
+	}	
+	else if (b_size[0] > 0 && check_order(a, '+', a_size[0])/*  && b[0] < a[0] */)
 	{
 		pa(a, b, &a_size[0], &b_size[0]);
 		printf("pa\n");
@@ -248,26 +268,6 @@ void	algorithm(int a[], int b[], int a_size[], int b_size[], int a_len)
 	{
 		pb(a, b, &a_size[0], &b_size[0]);
 		printf("pb\n");
-	}
-	else if (check_max(a, a[0], a_size[0]) && check_min(b, b[0], b_size[0]))
-	{
-		rr(a, b, &a_size[0], &b_size[0]);
-		printf("rr\n");
-	}
-	else if (check_min(a, a[a_size[0] - 1], a_size[0]) && check_max(b, b[b_size[0] - 1], b_size[0]))
-	{
-		rrr(a, b, &a_size[0], &b_size[0]);
-		printf("rrr\n");
-	}
-	else if (check_min(a, a[a_size[0] - 1], a_size[0]))
-	{
-		rra(a, &a_size[0]);
-		printf("rra\n");
-	}
-	else if (check_max(b, b[b_size[0] - 1], b_size[0]))
-	{
-		rrb(b, &b_size[0]);
-		printf("rrb\n");
 	}
 	else 
 		return ;

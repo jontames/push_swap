@@ -6,7 +6,7 @@
 /*   By: jtames <jtames@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 18:04:06 by jtames            #+#    #+#             */
-/*   Updated: 2025/01/17 18:09:16 by jtames           ###   ########.fr       */
+/*   Updated: 2025/01/20 19:15:51 by jtames           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ void	ss(int a[], int b[])
 	sb(b);
 }
 
-void	pa(int a[], int b[], int a_size[], int b_size[])
+void	pa(int a[], int b[], int stck_size[])
 {
 	int	i;
 	
-	i = a_size[0] - 1;
+	i = stck_size[0] - 1;
 	while (i >= 0)
 	{
 		a[i + 1] = a[i];
@@ -51,21 +51,21 @@ void	pa(int a[], int b[], int a_size[], int b_size[])
 	}
 	a[0] = b[0];
 	i = 0;
-	while (i < b_size[0])
+	while (i < stck_size[1])
 	{
 		b[i] = b[i + 1];
 		i++;
 	}
 	b[i - 1] = 0;
-	a_size[0]++;
-	b_size[0]--;
+	stck_size[0]++;
+	stck_size[1]--;
 }
 
-void	pb(int a[], int b[], int a_size[], int b_size[])
+void	pb(int a[], int b[], int stck_size[])
 {
 	int	i;
 	
-	i = b_size[0] - 1;
+	i = stck_size[1] - 1;
 	while (i >= 0)
 	{
 		b[i + 1] = b[i];
@@ -73,24 +73,24 @@ void	pb(int a[], int b[], int a_size[], int b_size[])
 	}
 	b[0] = a[0];
 	i = 0;
-	while (i < a_size[0])
+	while (i < stck_size[0])
 	{
 		a[i] = a[i + 1];
 		i++;
 	}
 	a[i - 1] = 0;
-	a_size[0]--;
-	b_size[0]++;
+	stck_size[0]--;
+	stck_size[1]++;
 }
 
-void	ra(int a[], int a_size[])
+void	ra(int a[], int stck_size[])
 {
 	int		i;
 	int		temp;
 
 	i = 0;
 	temp = a[0];
-	while (i < a_size[0])
+	while (i < stck_size[0])
 	{
 		a[i] = a[i + 1];
 		i++;
@@ -98,14 +98,14 @@ void	ra(int a[], int a_size[])
 	a[i - 1] = temp;
 }
 
-void	rb(int b[], int b_size[])
+void	rb(int b[], int stck_size[])
 {
 	int		i;
 	int		temp;
 
 	i = 0;
 	temp = b[0];
-	while (i < b_size[0])
+	while (i < stck_size[1])
 	{
 		b[i] = b[i + 1];
 		i++;
@@ -113,18 +113,18 @@ void	rb(int b[], int b_size[])
 	b[i - 1] = temp;
 }
 
-void	rr(int a[], int b[], int a_size[], int b_size[])
+void	rr(int a[], int b[], int stck_size[])
 {
-	ra(a, &a_size[0]);
-	rb(b, &b_size[0]);
+	ra(a, &stck_size[0]);
+	rb(b, &stck_size[1]);
 }
 
-void	rra(int a[], int a_size[])
+void	rra(int a[], int stck_size[])
 {
 	int		i;
 	int		temp;
 
-	i = a_size[0] - 1;
+	i = stck_size[0] - 1;
 	temp = a[i];
 	while (i > 0)
 	{
@@ -134,12 +134,12 @@ void	rra(int a[], int a_size[])
 	a[i] = temp;
 }
 
-void	rrb(int b[], int b_size[])
+void	rrb(int b[], int stck_size[])
 {
 	int		i;
 	int		temp;
 
-	i = b_size[0] - 1;
+	i = stck_size[1] - 1;
 	temp = b[i];
 	while (i > 0)
 	{
@@ -149,10 +149,10 @@ void	rrb(int b[], int b_size[])
 	b[i] = temp;
 }
 
-void	rrr(int a[], int b[], int a_size[], int b_size[])
+void	rrr(int a[], int b[], int stck_size[])
 {
-	rra(a, &a_size[0]);
-	rrb(b, &b_size[0]);
+	rra(a, &stck_size[0]);
+	rrb(b, &stck_size[1]);
 }
 
 int	check_order(int stack[], char way, int size)
@@ -212,61 +212,61 @@ int	check_max(int stack[], int n, int size)
 	return 1;
 }
 
-void	algorithm(int a[], int b[], int a_size[], int b_size[], int a_len)
+void	algorithm(int a[], int b[], int stck_size[], int a_len)
 {
-	if ((a_size[0] > 1 && check_min(a, a[a_size[0] - 1], a_size[0])) && (b_size[0] > 1 && check_max(b, b[b_size[0] - 1], b_size[0])))
+	if ((stck_size[0] > 1 && check_min(a, a[stck_size[0] - 1], stck_size[0])) && (stck_size[1] > 1 && check_max(b, b[stck_size[1] - 1], stck_size[1])))
 	{
-		rrr(a, b, &a_size[0], &b_size[0]);
+		rrr(a, b, stck_size);
 		printf("rrr\n");
 	}
-	else if ((a_size[0] > 1 && check_max(a, a[0], a_size[0])) && (b_size[0] > 1 && check_min(b, b[0], b_size[0])))
+	else if ((stck_size[0] > 1 && check_max(a, a[0], stck_size[0])) && (stck_size[1] > 1 && check_min(b, b[0], stck_size[1])))
 	{
-		rr(a, b, &a_size[0], &b_size[0]);
+		rr(a, b, stck_size);
 		printf("rr\n");
 	}
-	else if (a_size[0] > 1 && check_min(a, a[a_size[0] - 1], a_size[0]))
+	else if (stck_size[0] > 1 && check_min(a, a[stck_size[0] - 1], stck_size[0]))
 	{
-		rra(a, &a_size[0]);
+		rra(a, stck_size);
 		printf("rra\n");
 	}
-	else if ((a_size[0] > 1 && b_size[0] > 1) && (a[1] < a[0] && b[1] > b[0]))
+	else if ((stck_size[0] > 1 && stck_size[1] > 1) && (a[1] < a[0] && b[1] > b[0]))
 	{	
 		ss(a, b);
 		printf("ss\n");
 	}
-	else if (a_size[0] > 1 && a[1] < a[0])
+	else if ((stck_size[0] > 1 && check_max(a, a[0], stck_size[0])) || (stck_size[0] > 1 && a[0] > a[stck_size[0] - 1]))
+	{
+		ra(a, stck_size);
+		printf("ra\n");
+	}
+	else if (stck_size[0] > 1 && a[1] < a[0])
 	{
 		sa(a);
 		printf("sa\n");
 	}
-	else if ((a_size[0] > 1 && check_max(a, a[0], a_size[0])) || (a_size[0] > 1 && a[0] > a[a_size[0] - 1]))
+	else if (stck_size[1] > 1 && check_max(b, b[stck_size[1] - 1], stck_size[1]))
 	{
-		ra(a, &a_size[0]);
-		printf("ra\n");
-	}
-	else if (b_size[0] > 1 && check_max(b, b[b_size[0] - 1], b_size[0]))
-	{
-		rrb(b, &b_size[0]);
+		rrb(b, &stck_size[1]);
 		printf("rrb\n");
 	}
-	else if (b_size[0] > 1 && check_min(b, b[0], b_size[0]))
+	else if (stck_size[1] > 1 && check_min(b, b[0], stck_size[1]))
 	{
-		rb(b, &b_size[0]);
+		rb(b, stck_size);
 		printf("rb\n");
 	}
-	else if (b_size[0] > 1 && b[1] > b[0])
+	else if (stck_size[1] > 1 && b[1] > b[0])
 	{
 		sb(b);
 		printf("sb\n");
 	}	
-	else if (b_size[0] > 0 && check_order(a, '+', a_size[0])/*  && b[0] < a[0] */)
+	else if (stck_size[1] > 0 && check_order(a, '+', stck_size[0])/*  && b[0] < a[0] */)
 	{
-		pa(a, b, &a_size[0], &b_size[0]);
+		pa(a, b, stck_size);
 		printf("pa\n");
 	}
-	else if (a_size[0] > 0 && a[0] < a[1] /* && a[0] > b[0] */)
+	else if (stck_size[0] > 0 && a[0] < a[1] /* && a[0] > b[0] */)
 	{
-		pb(a, b, &a_size[0], &b_size[0]);
+		pb(a, b, stck_size);
 		printf("pb\n");
 	}
 	else 
@@ -275,7 +275,7 @@ void	algorithm(int a[], int b[], int a_size[], int b_size[], int a_len)
 	if (check_order(a, '+', a_len))
 		return ;
 	else
-		algorithm(a, b, &a_size[0], &b_size[0], a_len);
+		algorithm(a, b, stck_size, a_len);
 }
 
 int main(int argc, char const *argv[])
@@ -285,12 +285,11 @@ int main(int argc, char const *argv[])
 	int		i;
 	int		j;
 	int		a_len;
-	int		a_size[1];
-	int		b_size[1];
+	int		stck_size[2];
 
 	a_len = argc - 1;
-	a_size[0] = argc - 1;
-	b_size[0] = 0;
+	stck_size[0] = argc - 1;
+	stck_size[1] = 0;
 	i = 0;
 	while (i < a_len)
 	{
@@ -308,7 +307,7 @@ int main(int argc, char const *argv[])
 			j++;
 		}
 	}
-	algorithm(a, b, &a_size[0], &b_size[0], a_len);
+	algorithm(a, b, stck_size, a_len);
 	i = 0;
 	while (i < a_len)
 	{

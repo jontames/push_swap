@@ -1,0 +1,3 @@
+Mandar a B todos los numeros que no esten en su posicion relativa en A
+Calcular que numero de B requiere menos movimientos para ser introducido en A
+Introducir ese numero en A

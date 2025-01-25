@@ -6,7 +6,7 @@
 /*   By: jtames <jtames@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 18:04:06 by jtames            #+#    #+#             */
-/*   Updated: 2025/01/20 19:15:51 by jtames           ###   ########.fr       */
+/*   Updated: 2025/01/25 20:46:09 by jtames           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,8 +212,36 @@ int	check_max(int stack[], int n, int size)
 	return 1;
 }
 
+void	push_messy(int a[], int b[], int stck_size[])
+{
+	int		i;
+	int		min_pos;
+	int		max_pos;
+
+	i = 0;
+	min_pos = 0;
+	max_pos = 0;
+	while (i < stck_size[0])
+	{
+		if (check_min(a, a[i], stck_size[0]))
+			min_pos = i;
+		else if (check_max(a, a[i], stck_size[0]))
+			max_pos = i;
+		i++;
+	}
+	
+	while (!check_order(a, '+', stck_size[0]))
+	{
+		
+	}
+}
+
 void	algorithm(int a[], int b[], int stck_size[], int a_len)
 {
+	static int	instruction_nbr = 1;
+
+	printf("%d: ", instruction_nbr);
+	
 	if ((stck_size[0] > 1 && check_min(a, a[stck_size[0] - 1], stck_size[0])) && (stck_size[1] > 1 && check_max(b, b[stck_size[1] - 1], stck_size[1])))
 	{
 		rrr(a, b, stck_size);
@@ -246,7 +274,7 @@ void	algorithm(int a[], int b[], int stck_size[], int a_len)
 	}
 	else if (stck_size[1] > 1 && check_max(b, b[stck_size[1] - 1], stck_size[1]))
 	{
-		rrb(b, &stck_size[1]);
+		rrb(b, stck_size);
 		printf("rrb\n");
 	}
 	else if (stck_size[1] > 1 && check_min(b, b[0], stck_size[1]))
@@ -271,6 +299,8 @@ void	algorithm(int a[], int b[], int stck_size[], int a_len)
 	}
 	else 
 		return ;
+
+	instruction_nbr++;
 	
 	if (check_order(a, '+', a_len))
 		return ;

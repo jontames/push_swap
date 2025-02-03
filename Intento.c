@@ -6,7 +6,7 @@
 /*   By: jtames <jtames@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 18:04:06 by jtames            #+#    #+#             */
-/*   Updated: 2025/01/25 20:46:09 by jtames           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:39:41 by jtames           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,74 @@ int	check_max(int stack[], int n, int size)
 	return 1;
 }
 
-void	push_messy(int a[], int b[], int stck_size[])
+int	find_min(int stack[], int size)
+{
+	int		i;
+	int		min_pos;
+
+	i = 0;
+	min_pos = 0;
+	while (i < size)
+	{
+		if (stack[i] < stack[min_pos])
+			min_pos = i;
+		i++;
+	}
+	return (min_pos);
+}
+
+int	find_max(int stack[], int size)
+{
+	int		i;
+	int		max_pos;
+
+	i = 0;
+	max_pos = 0;
+	while (i < size)
+	{
+		if (stack[i] > stack[max_pos])
+			max_pos = i;
+		i++;
+	}
+	return (max_pos);
+}
+
+int	count_dorgz(int stack[], int size)
+{
+	int		i;
+	int		max_pos;
+	int		dorgz;
+	int		min_pos;
+
+	min_pos = find_min(stack, size);
+	max_pos = find_max(stack, size);
+	dorgz = 0;
+	i = min_pos + 1;
+	while (stack[i] != stack[max_pos])
+	{
+		if (i == 0)
+		{
+			if (stack[i] < stack[size - 1])
+				dorgz++;
+		}
+		if (stack[i] < stack[i - 1])
+			dorgz++;
+		i++;
+		if (i >= size)
+			i = 0;
+	}
+	i++;
+	while (stack[i] != stack[min_pos])
+	{
+		dorgz++;
+		i++;
+		if (i >= size)
+			i = 0;
+	}
+	return (dorgz);
+}
+
+/* void	push_messy(int a[], int b[], int stck_size[])
 {
 	int		i;
 	int		min_pos;
@@ -234,7 +301,7 @@ void	push_messy(int a[], int b[], int stck_size[])
 	{
 		
 	}
-}
+} */
 
 void	algorithm(int a[], int b[], int stck_size[], int a_len)
 {
@@ -337,7 +404,10 @@ int main(int argc, char const *argv[])
 			j++;
 		}
 	}
-	algorithm(a, b, stck_size, a_len);
+	printf("MAX: %d\n", find_max(a, stck_size[0]));
+	printf("MIN: %d\n", find_min(a, stck_size[0]));
+	printf("DORGZ: %d\n", count_dorgz(a, stck_size[0]));
+	// algorithm(a, b, stck_size, a_len);
 	i = 0;
 	while (i < a_len)
 	{

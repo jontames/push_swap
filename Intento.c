@@ -6,7 +6,7 @@
 /*   By: jtames <jtames@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 18:04:06 by jtames            #+#    #+#             */
-/*   Updated: 2025/02/03 20:39:41 by jtames           ###   ########.fr       */
+/*   Updated: 2025/02/07 20:51:19 by jtames           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,6 +279,170 @@ int	count_dorgz(int stack[], int size)
 	return (dorgz);
 }
 
+void	move_dorgz(int a[], int b[], int stck_size[])
+{
+	int		dorgz;
+	int		min_nbr;
+	// int		max_nbr;
+	
+	dorgz = count_dorgz(a, stck_size[0]);
+	min_nbr = a[find_min(a, stck_size[0])];
+	while (dorgz > 0)
+	{
+		if (a[0] != min_nbr && a[0] < a[stck_size[0] - 1])
+		{
+			pb(a, b, stck_size);
+			printf("pb\n");
+			dorgz--;
+		}
+		else
+		{
+			ra(a, stck_size);
+			printf("ra\n");
+		}
+	}
+}
+
+void	calc_move_near_top(int a[], int b[], int stck_size[])
+{
+	int		i;
+	int		diff;
+	int		pos;
+	int		nbr;
+	
+	i = 0;
+	diff = 2147483647;
+	pos = 0;
+	while (i < (stck_size[0]))
+	{
+		if (a[i] > b[0])
+		{
+			if ((a[i] - b[0]) < diff)
+			{
+				diff = a[i] - b[0];
+				pos = i;
+			}
+		}
+		i++;
+	}
+	nbr = a[pos];
+	if ((stck_size[0] - 1) - pos < pos)
+	{
+		while (a[0] != nbr)
+		{
+			rra(a, stck_size);
+			printf("rra\n");
+		}
+	}
+	else
+	{
+		while (a[0] != nbr)
+		{
+			ra(a, stck_size);
+			printf("ra\n");
+		}
+	}
+}
+
+int	calc_near_top(int a[], int b, int stck_size[])
+{
+	int		i;
+	int		diff;
+	int		pos;
+	
+	i = 0;
+	diff = 2147483647;
+	pos = 0;
+	while (i < (stck_size[0]))
+	{
+		if (a[i] > b)
+		{
+			if ((a[i] - b) < diff)
+			{
+				diff = a[i] - b;
+				pos = i;
+			}
+		}
+		i++;
+	}
+	return (pos);
+}
+
+int	calc_best2move(int a[], int b[], int stck_size[])
+{
+	int		pos_first;
+	int		pos_last;
+	int		mv_first;
+	int		mv_last;
+
+	pos_first = calc_near_top(a, b[0], stck_size);
+	if ((stck_size[0] - 1) - pos_first < pos_first)
+		mv_first = (stck_size[0] - 1) - pos_first;
+	else
+		mv_first = pos_first;
+	pos_last = calc_near_top(a, b[stck_size[1] - 1], stck_size);
+	if ((stck_size[0] - 1) - pos_last < pos_last)
+		mv_last = (stck_size[0] - 1) - pos_last;
+	else
+		mv_last = pos_last;
+	if (mv_last < mv_first)
+		return (1);
+	else
+		return (0);
+}
+
+void	mv_best(int a[], int b[], int stck_size[])
+{
+	int		pos;
+	int		nbr;
+	
+	pos = 0;
+	if (calc_best2move(a, b, stck_size) == 0)
+	{
+		pos = calc_near_top(a, b[0], stck_size);
+		nbr = a[pos];
+		if ((stck_size[0] - 1) - pos < pos)
+		{
+			while (a[0] != nbr)
+			{
+				rra(a, stck_size);
+				printf("rra\n");
+			}
+		}
+		else
+		{
+			while (a[0] != nbr)
+			{
+				ra(a, stck_size);
+				printf("ra\n");
+			}
+		}
+	}
+	else if (calc_best2move(a, b, stck_size) == 1)
+	{
+		rrb(b, stck_size);
+		printf("rrb\n");
+		pos = calc_near_top(a, b[0], stck_size);
+		nbr = a[pos];
+		if ((stck_size[0] - 1) - pos < pos)
+		{
+			while (a[0] != nbr)
+			{
+				rra(a, stck_size);
+				printf("rra\n");
+			}
+		}
+		else
+		{
+			while (a[0] != nbr)
+			{
+				ra(a, stck_size);
+				printf("ra\n");
+			}
+		}
+	}
+}
+
 /* void	push_messy(int a[], int b[], int stck_size[])
 {
 	int		i;
@@ -383,6 +547,8 @@ int main(int argc, char const *argv[])
 	int		j;
 	int		a_len;
 	int		stck_size[2];
+	int		nbr;
+	int		pos;
 
 	a_len = argc - 1;
 	stck_size[0] = argc - 1;
@@ -404,9 +570,63 @@ int main(int argc, char const *argv[])
 			j++;
 		}
 	}
-	printf("MAX: %d\n", find_max(a, stck_size[0]));
-	printf("MIN: %d\n", find_min(a, stck_size[0]));
-	printf("DORGZ: %d\n", count_dorgz(a, stck_size[0]));
+	// printf("MAX: %d\n", find_max(a, stck_size[0]));
+	// printf("MIN: %d\n", find_min(a, stck_size[0]));
+	// printf("DORGZ: %d\n", count_dorgz(a, stck_size[0]));
+	// printf("\n");
+	
+	// move_dorgz(a, b, stck_size);
+	// while (stck_size[1] > 0)
+	// {
+	// 	calc_move_near_top(a, b, stck_size);
+	// 	pa(a, b, stck_size);
+	// 	printf("pa\n");
+	// }
+	// nbr = a[find_min(a, stck_size[0])];
+	// pos = find_min(a, stck_size[0]);
+	// if ((stck_size[0] - 1) - pos < pos)
+	// {
+	// 	while (a[0] != nbr)
+	// 	{
+	// 		rra(a, stck_size);
+	// 		printf("rra\n");
+	// 	}
+	// }
+	// else
+	// {
+	// 	while (a[0] != nbr)
+	// 	{
+	// 		ra(a, stck_size);
+	// 		printf("ra\n");
+	// 	}
+	// }
+
+	move_dorgz(a, b, stck_size);
+	while (stck_size[1] > 0)
+	{
+		mv_best(a, b, stck_size);
+		pa(a, b, stck_size);
+		printf("pa\n");
+	}
+	nbr = a[find_min(a, stck_size[0])];
+	pos = find_min(a, stck_size[0]);
+	if ((stck_size[0] - 1) - pos < pos)
+	{
+		while (a[0] != nbr)
+		{
+			rra(a, stck_size);
+			printf("rra\n");
+		}
+	}
+	else
+	{
+		while (a[0] != nbr)
+		{
+			ra(a, stck_size);
+			printf("ra\n");
+		}
+	}
+	
 	// algorithm(a, b, stck_size, a_len);
 	i = 0;
 	while (i < a_len)
